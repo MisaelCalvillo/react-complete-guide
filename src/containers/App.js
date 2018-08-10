@@ -1,7 +1,11 @@
 import React, { Component } from 'react';
-import Classes from './App.css';
+import classes from './App.css';
 import Persons from './../components/Persons/Persons';
 import Cockpit from './../components/Cockpit/Cockpit';
+
+import Aux from './../hoc/Aux';
+import withClassFunc from './../hoc/withClassFunc';
+
 
 class App extends Component {
 
@@ -88,7 +92,7 @@ class App extends Component {
 
 
     return (
-        <div className={Classes.App}>
+        <Aux>
           <button onClick={() => {this.setState({showPersons: true})}}>Show Persons</button>
           <Cockpit 
             appTitle={this.props.title}
@@ -97,9 +101,9 @@ class App extends Component {
             clicked={this.togglePersonsHandler}
           />
           {persons}
-        </div>
+        </Aux>
     );  
   }
 }
 
-export default App;
+export default withClassFunc(App, classes.App);

@@ -4,7 +4,9 @@ import Persons from './../components/Persons/Persons';
 import Cockpit from './../components/Cockpit/Cockpit';
 
 import Aux from './../hoc/Aux';
-import withClassFunc from './../hoc/withClassFunc';
+import withClass from './../hoc/withClass';
+
+export const AuthContext = React.createContext(false);
 
 
 class App extends Component {
@@ -19,7 +21,8 @@ class App extends Component {
         { id: 'rejje', name: 'Stephanie', age: 26 },
       ],
       showPersons: false,
-      toggleClicked: 0
+      toggleClicked: 0,
+      authenticated: false
     }
   }
 
@@ -34,7 +37,8 @@ class App extends Component {
   shouldComponentUpdate(nextProps, nextState){
     console.log('[UPDATE App.js] Inside shouldComponentUpdate', nextProps, nextState);
     return nextState.persons !== this.state.persons ||
-           nextState.showPersons !== this.state.showPersons;
+           nextState.showPersons !== this.state.showPersons ||
+           nextState.authenticated !== this.state.authenticated;
   }
 
   componentWillUpdate(nextProps, nextState){
@@ -78,6 +82,12 @@ class App extends Component {
     }})
   }
 
+
+  loginHandler = () => {
+    this.setState({authenticated: true})
+    console.log("Si se aprieta")
+  }
+
   render() {
     console.log('[App.js] Inside Render')
     let persons = null;
@@ -101,12 +111,15 @@ class App extends Component {
             appTitle={this.props.title}
             showPersons={this.state.showPersons}
             persons={this.state.persons}
+            login={this.loginHandler}
             clicked={this.togglePersonsHandler}
           />
-          {persons}
+          <AuthContext.Provider value={this.state.authenticated}>
+              {persons}
+          </AuthContext.Provider>
         </Aux>
     );  
   }
 }
 
-export default withClassFunc(App, classes.App);
+export default withClass(App, classes.App);
